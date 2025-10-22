@@ -1,10 +1,11 @@
 import arcade
 from pyexpat.errors import messages
+from pyglet.resource import texture
 
 from managers.input_manager import InputManager
 from core.money import Money
 from core.augment import Augment
-from arcade.gui import UIFlatButton, UIManager, UIOnClickEvent, UIMessageBox
+from arcade.gui import UIFlatButton, UIManager, UIOnClickEvent, UIMessageBox, UITextureButton
 
 totalMoney = Money()
 listAugment = (
@@ -40,11 +41,23 @@ class GameView(arcade.View):
                     message_text=a.buy_bonus(),
                 )
                 self.manager.add(message)
-
-
+    def setup_click_button(self):
+        texture_btn=arcade.load_texture("assets/gold_ore.webp")
+        bouton_click = UITextureButton(
+            width=350,
+            height=350,
+            x=680,
+            y=100,
+            texture=texture_btn
+        )
+        self.manager.add(bouton_click)
+        @bouton_click.event
+        def on_click(event: UIOnClickEvent):
+            totalMoney.add_money_click()
 
     def on_show_view(self):
         self.setup_augments_buttons()
+        self.setup_click_button()
         self.manager.enable()
         arcade.set_background_color(arcade.color.AMETHYST)
 
@@ -61,7 +74,7 @@ class GameView(arcade.View):
         if key == arcade.key.SPACE:
             totalMoney.add_money_click()
     def on_mouse_press(self, x, y, button, modifiers):
-        if button == arcade.MOUSE_BUTTON_LEFT:
+        if button == arcade.MOUSE_BUTTON_RIGHT:
             totalMoney.add_money_click()
 
 
