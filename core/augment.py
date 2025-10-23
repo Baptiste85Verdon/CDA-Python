@@ -8,7 +8,7 @@ from core.money import Money
 class Augment:
     instances = []
     # Constructeur
-    def __init__(self,augment_id ,title, price, bonus_type, bonus_amount, bought: Boolean, time_bought, max_time_bought,condition_message, condition_amount, condition_id, condition_type, money: Money, pos_x, pos_y ):
+    def __init__(self,augment_id ,title, price, bonus_type, bonus_amount, bought: Boolean, time_bought, max_time_bought, condition_amount, condition_id, condition_type, money: Money, pos_x, pos_y ):
         self.augment_id = augment_id
         self.title = title
         self.price = price
@@ -17,7 +17,6 @@ class Augment:
         self.bought = bought
         self.time_bought = time_bought
         self.max_time_bought = max_time_bought
-        self.condition_message = condition_message
         self.condition_amount = condition_amount
         self.condition_id = condition_id
         self.condition_type = condition_type
@@ -45,8 +44,6 @@ class Augment:
         return self.bought
     def get_max_time_bought(self):
         return self.max_time_bought
-    def get_condition_message(self):
-        return self.condition_message
     def get_condition_amount(self):
         return self.condition_amount
     def get_condition_id(self):
@@ -116,16 +113,8 @@ class Augment:
             # Si condition 1, on parcourt la liste des bonus créés
             for augment in self.instances :
                 # Si l'id du bonus correspond avec celui de la condition
-                print(augment.get_augment_id())
-                print('---')
-                print(self.condition_id)
                 if augment.get_augment_id() == self.condition_id:
                     # On compare le niveau de ce bonus comparé à la condition
-                    print('entre')
-                    print(augment.get_time_bought())
-                    print('+++')
-                    print(self.condition_amount)
-                    print('sort')
                     if augment.get_time_bought() >= self.condition_amount:
                         # Si il est supérieur ou égal, on effectue l'achat du bonus en appelant la fonction
                         message = self.buy_bonus()
@@ -133,8 +122,23 @@ class Augment:
                         message = f"Les conditions ne sont pas remplies pour acheter ce bonus.\nIl vous faut acheter le bonus suivant encore {self.condition_amount-augment.get_time_bought()} fois.\n'{augment.get_title()}'"
 
         elif self.condition_type == 2:
-            # Si condition 2, on récupère le montant d'argent généré par clic
-            print(self.money.get_per_click()+self.money.get_bonus_per_click())
+            # Si condition 2, on récupère le montant généré par clic
+            if self.money.get_per_click()+self.money.get_bonus_per_click() >= self.condition_amount:
+                message = self.buy_bonus()
+            else:
+                message = f"Les conditions ne sont pas remplies pour acheter ce bonus. \nIl vous faut avoir un montant de {self.condition_amount} Or par clic"
+        elif self.condition_type == 3:
+            # Si condition 3, on récupère le montant généré par clic automatique
+            if self.money.get_per_automation()+self.money.get_bonus_per_automation() >= self.condition_amount:
+                message = self.buy_bonus()
+            else:
+                message = f"Les conditions ne sont pas remplies pour acheter ce bonus. \nIl vous faut avoir un montant de {self.condition_amount} Or par clic automatique"
+        elif self.condition_type == 4:
+            # Si condition 4, on récupère l'interval entre les générations automatique
+            if self.money.get_initial_interval()-self.money.get_bonus_interval() <= self.condition_amount:
+                message = self.buy_bonus()
+            else:
+                message = f"Les conditions ne sont pas remplies pour acheter ce bonus. \nIl vous faut avoir un temps entre chaque clic automatique inférieur ou égal à {self.condition_amount}"
         elif self.condition_type == 0:
             message = self.buy_bonus()
         return message

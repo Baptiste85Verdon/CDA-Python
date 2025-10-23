@@ -9,13 +9,24 @@ from arcade.types import Color
 
 totalMoney = Money()
 listAugment = (
-    Augment(1,'Augmente vos clics de 1', 20,1, 1, False,0,100,'',0,0, 0,totalMoney, 0, 550),
-    Augment(2,'Augmente vos clics de 10', 40,1, 10, False,0,30,'Test de message',5,1, 1,totalMoney, 0, 495),
-    Augment(3,'Réduit le temps de vos clics auto de 8s',40, 3, 8, False,0,1,'',0,0, 2,totalMoney, 0, 440),
-    Augment(4,'Augmente vos clics auto de 800',10, 2, 800, False,0,10,'',0,0, 2,totalMoney, 0, 385),
-    Augment(5,'Augmente vos clics de 150', 400, 1, 150, False,0,10,'Test',123456789,0,2, totalMoney, 0, 330)
+    Augment(1, 'Augmente vos clics de 1', 10, 1, 1, False, 0, 100, 0, 0, 0, totalMoney, 0, 650),
+    Augment(2, 'Augmente vos clics de 10', 50, 1, 10, False, 0, 15, 5, 1, 1, totalMoney, 0, 598),
+    Augment(3, 'Augmente vos clics de 20', 600, 1, 20, False, 0, 10, 10, 2, 1, totalMoney, 0, 546),
+    Augment(4, 'Augmente vos clics de 50', 2500, 1, 50, False, 0, 8, 200, 0, 2, totalMoney, 0, 494),
+    Augment(5, 'Augmente vos clics de 100', 10000, 1, 100, False, 0, 5, 4, 4, 1, totalMoney, 0, 442),
+
+    Augment(6, 'Augmente vos clics auto de 1', 100, 2, 1, False, 0, 50, 0, 0, 0, totalMoney, 0, 380),
+    Augment(7, 'Augmente vos clics auto de 5', 500, 2, 5, False, 0, 20, 5, 6, 1, totalMoney, 0, 328),
+    Augment(8, 'Augmente vos clics auto de 20', 2500, 2, 20, False, 0, 15, 50, 0, 3, totalMoney, 0, 276),
+    Augment(9, 'Augmente vos clics auto de 100', 12000, 2, 100, False, 0, 10, 5, 8, 1, totalMoney, 0, 224),
+    Augment(10, 'Augmente vos clics auto de 250', 50000, 2, 250, False, 0, 6, 500, 0, 3, totalMoney, 0, 172),
+
+    #Augment(11, 'Réduit le temps de vos clics auto de 0.4s', 10000, 3, 0.4, False, 0, 5, 1000, 0, 3, totalMoney, 0, 110),
+    Augment(11, 'Réduit le temps de vos clics auto de 0.5s', 10000, 3, 0.5, False, 0, 4, 0, 0, 0, totalMoney, 0, 110),
+    Augment(12, 'Réduit le temps de vos clics auto de 1s', 30000, 3, 1, False, 0, 2, 4, 11, 1, totalMoney, 0, 58),
+    Augment(13, 'Réduit le temps de vos clics auto de 2s',80000, 3, 2, False, 0, 2, 2, 12, 1, totalMoney, 0, 6),
+
 )
-print(listAugment)
 class ProgressbarAutomation(UIAnchorLayout):
     """A custom progress bar widget using UISpace for fill animation."""
 
@@ -57,6 +68,8 @@ class GameView(arcade.View):
         super().__init__()
         self.manager = UIManager()
         self.background = arcade.load_texture('assets/minecraft_background2.png')
+        arcade.load_font("assets/fonts/MinecraftRegular-Bmg3.otf")
+        self.minecraft_font = "Minecraft"
 
         self.progress_bar = ProgressbarAutomation()
         self.progress_bar.center_x = 950
@@ -73,14 +86,14 @@ class GameView(arcade.View):
         for index, augment in enumerate(listAugment):
             bouton = UITextureButton(
                 text=augment.title + ' pour ' + str(augment.price) + ' Or',
-                width=425,
+                width=450,
                 height=50,
                 x=augment.pos_x,
                 y=augment.pos_y,
                 texture=texture_btn_augments,
-                style={"normal": UITextureButton.UIStyle(font_color=arcade.color.BLACK),
-                        "hover":  UITextureButton.UIStyle(font_color=arcade.color.BLACK),
-                        "press":  UITextureButton.UIStyle(font_color=arcade.color.BLACK),
+                style={"normal": UITextureButton.UIStyle(font_name=self.minecraft_font,font_color=arcade.color.BLACK),
+                        "hover":  UITextureButton.UIStyle(font_name=self.minecraft_font,font_color=arcade.color.BLACK),
+                        "press":  UITextureButton.UIStyle(font_name=self.minecraft_font,font_color=arcade.color.BLACK),
                        },
             )
             self.manager.add(bouton)
@@ -89,9 +102,7 @@ class GameView(arcade.View):
                 message = UIMessageBox(
                     width=450,
                     height=175,
-                    # message_text=a.buy_bonus(),
                     message_text=a.check_condition(),
-                    # message_text=a.get_all_instances(),
                 )
                 self.manager.add(message)
 
@@ -121,6 +132,26 @@ class GameView(arcade.View):
             arcade.unschedule(self.auto_click_tick)
             arcade.schedule(self.auto_click_tick, self.interval)
 
+    def setup_quit_button(self):
+        texture_btn_quit=arcade.load_texture("assets/trade_background.png")
+        bouton_quit = UITextureButton(
+            text="Quitter le jeu et enregistrer votre score",
+            width=400,
+            height=50,
+            x=480,
+            y=650,
+            texture=texture_btn_quit,
+            style={
+            "normal": UITextureButton.UIStyle(font_name=self.minecraft_font, font_color=arcade.color.BLACK),
+            "hover": UITextureButton.UIStyle(font_name=self.minecraft_font, font_color=arcade.color.BLACK),
+            "press": UITextureButton.UIStyle(font_name=self.minecraft_font, font_color=arcade.color.BLACK),
+            }
+        )
+        self.manager.add(bouton_quit)
+        @bouton_quit.event
+        def on_click(event: UIOnClickEvent):
+            self.save_and_quit()
+
     def on_update(self, delta_time: float):
         now = time.time()
         elapsed = now - self.cycle_start_time
@@ -129,10 +160,10 @@ class GameView(arcade.View):
         progress = min(elapsed / self.interval, 1.0)
         self.progress_bar.value = progress
 
-
     def on_show_view(self):
         self.setup_augments_buttons()
         self.setup_click_button()
+        self.setup_quit_button()
         self.manager.enable()
         arcade.set_background_color(arcade.color.AMETHYST)
 
@@ -147,19 +178,20 @@ class GameView(arcade.View):
             arcade.LBWH(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
         )
         self.manager.draw()
-        arcade.draw_text("Or : "+str(totalMoney.get_total()), 950, 565,arcade.color.WHITE, 40, anchor_x="center")
-        arcade.draw_text("Par clic : "+ str(totalMoney.get_per_click()+totalMoney.get_bonus_per_click()), 950, 615 ,arcade.color.WHITE, 20, anchor_x="center")
-        arcade.draw_text("temps entre chaque clic automatique : "+str(totalMoney.get_initial_interval()-totalMoney.get_bonus_interval())+"s", 950, 60 ,arcade.color.WHITE, 20, anchor_x="center")
-        arcade.draw_text("Par clic automatique : "+ str(totalMoney.get_per_automation()+totalMoney.get_bonus_per_automation()), 950, 25 ,arcade.color.WHITE, 20, anchor_x="center")
+        arcade.draw_text("Or : "+str(totalMoney.get_total()), 950, 565,arcade.color.WHITE, 40, anchor_x="center",font_name=self.minecraft_font)
+        arcade.draw_text("Par clic : "+ str(totalMoney.get_per_click()+totalMoney.get_bonus_per_click()), 950, 615 ,arcade.color.WHITE, 20, anchor_x="center",font_name=self.minecraft_font)
+        arcade.draw_text("temps entre chaque clic automatique : "+str(totalMoney.get_initial_interval()-totalMoney.get_bonus_interval())+"s", 950, 60 ,arcade.color.WHITE, 20, anchor_x="center",font_name=self.minecraft_font)
+        arcade.draw_text("Par clic automatique : "+ str(totalMoney.get_per_automation()+totalMoney.get_bonus_per_automation()), 950, 25 ,arcade.color.WHITE, 20, anchor_x="center",font_name=self.minecraft_font)
 
-    #TODO ENLEVER
-    def on_key_press(self, key, modifiers):
-        if key == arcade.key.SPACE:
-            totalMoney.add_money_click()
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_RIGHT:
             totalMoney.add_money_click()
 
+    def save_and_quit(self):
+        with open("score.txt", "a", encoding="utf-8") as f:
+            f.write(f"Score : {totalMoney.total} Or\n")
+
+        arcade.close_window()
 
 
 

@@ -1,3 +1,5 @@
+import math
+
 class Money:
     # Constructeur
     def __init__(self, total=0, per_click=1, bonus_per_click=0, per_automation=1, bonus_per_automation=0, initial_interval_automation=10, bonus_interval=0):
@@ -59,6 +61,7 @@ class Money:
         self.bonus_interval += bonus_interval
     def reduce_interval_automation(self, bonus_interval):
         self.initial_interval -= bonus_interval
+
 
     #CALCUL MONEY
     def sub_money_buy(self, amount):
