@@ -134,11 +134,11 @@ class Augment:
             else:
                 message = f"Les conditions ne sont pas remplies pour acheter ce bonus. \nIl vous faut avoir un montant de {self.condition_amount} Or par clic automatique"
         elif self.condition_type == 4:
-            # Si condition 4, on récupère l'interval entre les générations automatique
+            # Si condition 4, on récupère l'interval entre les générations automatiques
             if self.money.get_initial_interval()-self.money.get_bonus_interval() <= self.condition_amount:
                 message = self.buy_bonus()
             else:
-                message = f"Les conditions ne sont pas remplies pour acheter ce bonus. \nIl vous faut avoir un temps entre chaque clic automatique inférieur ou égal à {self.condition_amount}"
+                message = f"Les conditions ne sont pas remplies pour acheter ce bonus. \nIl vous faut avoir un temps entre chaque clic automatique inférieur ou égal à {self.condition_amount}s"
         elif self.condition_type == 0:
             message = self.buy_bonus()
         return message

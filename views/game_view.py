@@ -7,7 +7,7 @@ from core.augment import Augment
 from arcade.gui import UIManager, UIOnClickEvent, UIMessageBox, UITextureButton, UIAnchorLayout, Property, UISpace, bind
 from arcade.types import Color
 
-totalMoney = Money()
+totalMoney = Money(100000000000000000000000)
 listAugment = (
     Augment(1, 'Augmente vos clics de 1', 10, 1, 1, False, 0, 100, 0, 0, 0, totalMoney, 0, 650),
     Augment(2, 'Augmente vos clics de 10', 50, 1, 10, False, 0, 15, 5, 1, 1, totalMoney, 0, 598),
@@ -21,10 +21,9 @@ listAugment = (
     Augment(9, 'Augmente vos clics auto de 100', 12000, 2, 100, False, 0, 10, 5, 8, 1, totalMoney, 0, 224),
     Augment(10, 'Augmente vos clics auto de 250', 50000, 2, 250, False, 0, 6, 500, 0, 3, totalMoney, 0, 172),
 
-    #Augment(11, 'Réduit le temps de vos clics auto de 0.4s', 10000, 3, 0.4, False, 0, 5, 1000, 0, 3, totalMoney, 0, 110),
     Augment(11, 'Réduit le temps de vos clics auto de 0.5s', 10000, 3, 0.5, False, 0, 4, 0, 0, 0, totalMoney, 0, 110),
     Augment(12, 'Réduit le temps de vos clics auto de 1s', 30000, 3, 1, False, 0, 2, 4, 11, 1, totalMoney, 0, 58),
-    Augment(13, 'Réduit le temps de vos clics auto de 2s',80000, 3, 2, False, 0, 2, 2, 12, 1, totalMoney, 0, 6),
+    Augment(13, 'Réduit le temps de vos clics auto de 2s',80000, 3, 2, False, 0, 2, 6, 0, 4, totalMoney, 0, 6),
 
 )
 class ProgressbarAutomation(UIAnchorLayout):
@@ -86,7 +85,7 @@ class GameView(arcade.View):
         for index, augment in enumerate(listAugment):
             bouton = UITextureButton(
                 text=augment.title + ' pour ' + str(augment.price) + ' Or',
-                width=450,
+                width=470,
                 height=50,
                 x=augment.pos_x,
                 y=augment.pos_y,
@@ -103,6 +102,7 @@ class GameView(arcade.View):
                     width=450,
                     height=175,
                     message_text=a.check_condition(),
+
                 )
                 self.manager.add(message)
 
